@@ -4,9 +4,22 @@ struct Point {
     y: u64,
 }
 
+struct ColorTuple(u8, u8, u8);
+
 #[derive(Debug)]
 enum Message {
-    // TODO: Define the different variants used below.
+    // DONE: Define the different variants used below.
+    Move (Point),
+    Echo (String),
+    ChangeColor (u8, u8, u8),
+    Quit,
+    Resize { width: u64, height: u64 },
+}
+
+impl From<ColorTuple> for Message {
+    fn from(color: ColorTuple) -> Self {
+        Message::ChangeColor(color.0, color.1, color.2)
+    }
 }
 
 impl Message {
