@@ -1,0 +1,18 @@
+{
+    "workbench.editor.pinnedTabSizing": "shrink",
+    "read-only.non-workspaceFiles.enable": true,
+    "read-only.non-workspaceFiles.statusBarButton": false,
+    "read-only.non-workspaceFiles.statusBarIconOnly": false,
+    "files.readonlyInclude": {
+        ".git/**": true,
+        "**/README.md": true,
+        "Cargo.lock": true,
+        "Cargo.toml": true,
+        "rust-analyzer.toml": true,
+        "solutions/**": true,
+        "tagert/**": true
+    },
+    "files.readonlyExclude": {
+        ".git/COMMIT_EDITMSG": true
+    }
+}
