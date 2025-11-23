@@ -1,9 +1,9 @@
-// TODO: Fix the compiler error in this function.
+// DONE: Fix the compiler error in this function.
 fn fill_vec(vec: Vec<i32>) -> Vec<i32> {
-    let vec = vec;
+    // // vec.push(88); // ! cannot mutate immutable variable `vec`
 
+    let mut vec = vec;
     vec.push(88);
-
     vec
 }
 
