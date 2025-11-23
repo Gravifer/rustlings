@@ -1,17 +1,24 @@
-// TODO: Fix the compiler error on this function.
+// DONE: Fix the compiler error on this function.
 fn picky_eater(food: &str) -> &str {
     if food == "strawberry" {
         "Yummy!"
+    } else if food == "potato" {
+        "I guess I can eat that."
     } else {
-        1
+        "No thanks!"
     }
+    // match food { // less spaghetti
+    //     "strawberry" => "Yummy!",
+    //     "potato" => "I guess I can eat that.",
+    //     _ => "No thanks!",
+    // }
 }
 
 fn main() {
     // You can optionally experiment here.
 }
 
-// TODO: Read the tests to understand the desired behavior.
+// DONE: Read the tests to understand the desired behavior.
 // Make all tests pass without changing them.
 #[cfg(test)]
 mod tests {
