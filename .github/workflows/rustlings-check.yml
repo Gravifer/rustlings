@@ -1,0 +1,82 @@
+name: Rust Version Check
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC to check for new Rust releases
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  check-rustlings:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: [stable, nightly]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust ${{ matrix.rust }}
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust }}
+
+      - name: Get Rust version
+        id: rust-version
+        run: |
+          RUST_VERSION=$(rustc --version | awk '{print $2}')
+          echo "version=$RUST_VERSION" >> $GITHUB_OUTPUT
+          echo "channel=${{ matrix.rust }}" >> $GITHUB_OUTPUT
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache cargo index
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache target directory
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: ${{ runner.os }}-target-${{ matrix.rust }}-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install rustlings
+        run: cargo install rustlings
+
+      - name: Run rustlings check-all
+        run: rustlings check-all
+
+      - name: Check if release exists
+        id: check-release
+        run: |
+          RELEASE_TAG="rust-${{ steps.rust-version.outputs.channel }}-${{ steps.rust-version.outputs.version }}"
+          if gh release view "$RELEASE_TAG" &>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+          echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        if: steps.check-release.outputs.exists == 'false'
+        run: |
+          gh release create "${{ steps.check-release.outputs.tag }}" \
+            --title "Verified with Rust ${{ steps.rust-version.outputs.channel }} ${{ steps.rust-version.outputs.version }}" \
+            --notes "✅ All rustlings exercises verified with Rust ${{ steps.rust-version.outputs.channel }} ${{ steps.rust-version.outputs.version }}
+
+          **Rust Version:** ${{ steps.rust-version.outputs.version }}
+          **Channel:** ${{ steps.rust-version.outputs.channel }}
+          **Verified:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          
+          This release confirms that all rustlings exercises pass with this Rust version."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
