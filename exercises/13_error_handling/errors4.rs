@@ -9,8 +9,20 @@ struct PositiveNonzeroInteger(u64);
 
 impl PositiveNonzeroInteger {
     fn new(value: i64) -> Result<Self, CreationError> {
-        // TODO: This function shouldn't always return an `Ok`.
-        Ok(Self(value as u64))
+        // DONE: This function shouldn't always return an `Ok`.
+        /* if value < 0 { // verbose ver
+            Err(CreationError::Negative)
+        } else if value == 0 {
+            Err(CreationError::Zero)
+        } else {
+            Ok(PositiveNonzeroInteger(value as u64))
+        } */
+        use std::cmp::Ordering::{Less, Equal, Greater};
+        match value.cmp(&0) {
+            Less => Err(CreationError::Negative),
+            Equal => Err(CreationError::Zero),
+            Greater => Ok(Self(value as u64)),
+        }
     }
 }
 
