@@ -1,6 +1,10 @@
-name: Rust Version Check
+name: Rustlings re-check
 
 on:
+  push:
+    branches:
+      - main
+      - master
   schedule:
     # Run daily at 2 AM UTC to check for new Rust releases
     - cron: '0 2 * * *'
@@ -9,6 +13,12 @@ on:
 jobs:
   check-rustlings:
     runs-on: ubuntu-latest
+    env: # try to convince rustlings to run headless
+      CARGO_TERM_VERBOSE: true
+      CARGO_TERM_COLOR: never
+      CARGO_TERM_PROGRESS_WHEN: never
+      CARGO_TERM_PROGRESS_WIDTH: 80
+      CARGO_TERM_PROGRESS_TERM_INTEGRATION: false
     strategy:
       matrix:
         rust: [stable, nightly]
