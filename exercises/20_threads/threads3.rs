@@ -15,12 +15,15 @@ impl Queue {
 }
 
 fn send_tx(q: Queue, tx: mpsc::Sender<u32>) {
-    // TODO: We want to send `tx` to both threads. But currently, it is moved
+    // DONE: We want to send `tx` to both threads. But currently, it is moved
     // into the first thread. How could you solve this problem?
+    /* * Clone the sender - this is cheap (just ref-count increment), not a deep copy.
+       The channel's internal buffer is shared; only the sender handle is cloned. */
+    let value = tx.clone();
     thread::spawn(move || {
         for val in q.first_half {
             println!("Sending {val:?}");
-            tx.send(val).unwrap();
+            value.send(val).unwrap();
             thread::sleep(Duration::from_millis(250));
         }
     });
