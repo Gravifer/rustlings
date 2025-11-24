@@ -1,13 +1,32 @@
 fn trim_me(input: &str) -> &str {
-    // TODO: Remove whitespace from both ends of a string.
+    // DONE: Remove whitespace from both ends of a string.
+    input.trim()
 }
 
 fn compose_me(input: &str) -> String {
     // TODO: Add " world!" to the string! There are multiple ways to do this.
+    /* // way 1 // * Equivalent to `input.to_string() + " world!"`
+      let mut result = String::from(input);
+      result.push_str(" world!");
+      result */
+    // way 2
+    format!("{} world!", input) /* HIR ⬇
+          ::alloc::__export::must_use({
+            ::alloc::fmt::format({
+                super let args = (&input,);
+                super let args = [format_argument::new_display(args.0)];
+                unsafe {
+                  format_arguments::new(b"\xc0\x07 world!\x00", &args)
+                }
+              })
+          })
+        */
 }
 
 fn replace_me(input: &str) -> String {
-    // TODO: Replace "cars" in the string with "balloons".
+    // DONE: Replace "cars" in the string with "balloons".
+    // * Returns String (not &str) because replacement creates new data that must be allocated.
+    input.replace("cars", "balloons")
 }
 
 fn main() {
