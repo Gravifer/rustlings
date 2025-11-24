@@ -6,22 +6,26 @@
 fn main() {
     let my_option: Option<()> = None;
     if my_option.is_none() {
-        println!("{:?}", my_option.unwrap());
+        println!("{:?}", my_option);
     }
 
     let my_arr = &[
-        -1, -2, -3
-        -4, -5, -6
+        -1, -2, -3,
+        -4, -5, -6,
     ];
     println!("My array! Here it is: {my_arr:?}");
 
-    let my_empty_vec = vec![1, 2, 3, 4, 5].resize(0, 5);
+    // vec![1, 2, 3, 4, 5].resize(0, 5); // resize returns (), but so we shouldn't assign it to my_empty_vec
+    // println!("This Vec is empty, see? {:?}", ()); // the clippy suggestions were not very helpful here
+    let mut my_empty_vec = vec![1, 2, 3, 4, 5];
+    // `resize` mutates a vector instead of returning a new one.
+    // `resize(0, …)` clears a vector, so it is better to use `clear`.
+    my_empty_vec.clear();
     println!("This Vec is empty, see? {my_empty_vec:?}");
 
     let mut value_a = 45;
     let mut value_b = 66;
     // Let's swap these two!
-    value_a = value_b;
-    value_b = value_a;
+    std::mem::swap(&mut value_a, &mut value_b);
     println!("value a: {value_a}; value b: {value_b}");
 }
