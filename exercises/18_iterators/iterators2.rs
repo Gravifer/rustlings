@@ -1,28 +1,37 @@
 // In this exercise, you'll learn some of the unique advantages that iterators
 // can offer.
 
-// TODO: Complete the `capitalize_first` function.
+// DONE: Complete the `capitalize_first` function.
 // "hello" -> "Hello"
 fn capitalize_first(input: &str) -> String {
     let mut chars = input.chars();
     match chars.next() {
         None => String::new(),
-        Some(first) => todo!(),
+        Some(first) => first.to_uppercase() // first.to_uppercase().to_string() + chars.as_str()
+                                .chain(chars).collect(),
     }
 }
 
-// TODO: Apply the `capitalize_first` function to a slice of string slices.
+// DONE: Apply the `capitalize_first` function to a slice of string slices.
 // Return a vector of strings.
 // ["hello", "world"] -> ["Hello", "World"]
 fn capitalize_words_vector(words: &[&str]) -> Vec<String> {
-    // ???
+    words.iter()
+        .map(|s| capitalize_first(s))
+        .collect() // specialized to collect::<Vec<String>>
 }
 
-// TODO: Apply the `capitalize_first` function again to a slice of string
+// DONE: Apply the `capitalize_first` function again to a slice of string
 // slices. Return a single string.
 // ["hello", " ", "world"] -> "Hello World"
 fn capitalize_words_string(words: &[&str]) -> String {
-    // ???
+    words.iter()
+        .map(|s| capitalize_first(s))
+        .collect() /* // specialized to collect::<String>
+            collect::<String>() with Iterator<Item=String> uses:
+            - String: FromIterator<String>
+            - implemented via Extend<String>
+            Thus Rust knows that collecting multiple Strings will concatenate them. */
 }
 
 fn main() {

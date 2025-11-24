@@ -1,7 +1,7 @@
 {
     "workbench.editor.pinnedTabSizing": "shrink",
     "read-only.non-workspaceFiles.enable": true,
-    "read-only.non-workspaceFiles.statusBarButton": false,
+    "read-only.non-workspaceFiles.statusBarButton": true,
     "read-only.non-workspaceFiles.statusBarIconOnly": true,
     "files.readonlyInclude": {
         ".git/**": true,
@@ -14,5 +14,8 @@
     },
     "files.readonlyExclude": {
         ".git/COMMIT_EDITMSG": true
-    }
+    },
+    "cSpell.words": [
+        "replacen"
+    ]
 }
